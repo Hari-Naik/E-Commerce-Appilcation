@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.input {
+  @apply w-full border-b border-[#828282]/25 outline-none focus:border-[#2874f0] transition duration-200;
+}
+
+input:focus ~ .input__text,
+.input:not(:placeholder-shown) ~ .input__text {
+  @apply text-sm transform -translate-y-4;
+}
+
+body {
+  background-color: #f1f3f6;
+}
