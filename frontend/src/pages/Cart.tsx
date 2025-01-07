@@ -1,19 +1,24 @@
-import { toast } from "react-toastify";
-import { useAppSelector } from "../app/hooks";
+import { useNavigate } from "react-router-dom";
+
 import CartItems from "../components/Cart/CartItems";
 import PriceDetails from "../components/Cart/PriceDetails";
 import EmptyPageView from "../components/EmptyPageView";
 
+import { useAppSelector } from "../app/hooks";
+import { useToken } from "../hooks/useToken";
+import { toast } from "react-toastify";
+
 import { loadStripe } from "@stripe/stripe-js";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+
 const Cart = () => {
-  const { user } = useAuth();
+  const { token } = useToken();
+  const { user } = useUser();
   const cart = useAppSelector(state => state.cart.cart);
   const navigate = useNavigate();
 
   const handleCheckout = async () => {
-    if (user) {
+    if (token) {
       const stripe = await loadStripe(
         "pk_test_51NzBPUSHYAbQKEXuV30nPsssHXMZY1KLc13VZKY4stSaTtA2awnjeZ6IgmDHk4N1i0WFyTvZW6a1iDVio34acOBX00LlmvyzA3"
       );
@@ -23,7 +28,7 @@ const Cart = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ products: cart }),
+        body: JSON.stringify({ items: cart, email: user?.email }),
       };
 
       const response = await fetch(
@@ -36,12 +41,8 @@ const Cart = () => {
         sessionId: session.id,
       });
 
-      console.log("checkout session", session);
-      console.log("checkout result", result);
-
       if (result?.error) {
         toast.error("Failed to checkout. Please try again.");
-        return;
       }
     } else {
       toast.error("Please login to checkout");

@@ -1,6 +1,6 @@
 import { FaUser } from "react-icons/fa6";
 
-import Cookies from "js-cookie";
+import { useToken } from "../../hooks/useToken";
 
 type MenuHeaderProps = {
   handleNaviageToLoginPage: () => void;
@@ -12,7 +12,7 @@ export const MOBILE_LOGO_URL =
 const MenuHeader: React.FC<MenuHeaderProps> = ({
   handleNaviageToLoginPage,
 }) => {
-  const token = Cookies.get("token");
+  const { token } = useToken();
   return (
     <div
       onClick={handleNaviageToLoginPage}

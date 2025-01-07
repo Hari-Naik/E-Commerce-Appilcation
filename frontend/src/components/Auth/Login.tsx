@@ -41,9 +41,13 @@ const Login: FC<LoginProps> = ({ handleAuthChange }) => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async formData => {
     try {
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      //   const token = await response.user.getIdToken();
-      //   Cookies.set("token", token, { expires: 30 });
+      const response = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const token = await response.user.getIdToken();
+      Cookies.set("token", token, { expires: 30 });
       toast.success("Login successful");
       navigate(-1);
     } catch (error: any) {

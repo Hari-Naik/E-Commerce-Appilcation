@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ProductType } from "../../types/definations";
 
-// interface CartState {
-//   cart: ProductType[];
-// }
-
 const initialState: ProductType[] = [];
 
 const wishlistSlice = createSlice({
@@ -15,7 +11,7 @@ const wishlistSlice = createSlice({
       const newItem = action.payload;
       const itemExits = state.find(item => item.id === newItem?.id);
       if (!itemExits) {
-        state.push(newItem);
+        state.unshift(newItem);
       }
     },
     removeFromWishlist: (state, action: PayloadAction<number>) => {

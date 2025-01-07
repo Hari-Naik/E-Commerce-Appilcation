@@ -1,5 +1,3 @@
-import { useSearchParams } from "react-router-dom";
-
 import Filters from "../components/Filters/Filters";
 import ProductsTitle from "../components/Products/ProductsTitle";
 import SortBy from "../components/Products/SortBy";
@@ -8,18 +6,14 @@ import ProductsList from "../components/Products/ProductsList";
 //custom hooks
 import { useCategories } from "../hooks/useCategories";
 import { useProducts } from "../hooks/useProducts";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import BreadCrumbs from "../components/Breadcrumbs/BreadCrumbs";
 import Pagination from "../components/Pagination/Pagination";
 import { ProductsSkelton } from "../components/Loading/Skeltons";
+import { useQueryParams } from "../hooks/useQueryParams";
 
 const Products = () => {
-  const [searchParams, setSearchParams] = useSearchParams({
-    limit: "32",
-    skip: "0",
-    sortBy: "price",
-    order: "asc",
-  });
+  const { searchParams, updateQuery, resetQuery } = useQueryParams();
 
   const skip = +(searchParams.get("skip") as string);
   const sortBy = searchParams.get("sortBy") || "price";
@@ -33,33 +27,17 @@ const Products = () => {
   const { data: categories } = useCategories();
   const { isLoading, data, error } = useProducts(skip, sortBy, order, category);
 
-  const handleSortBy = useCallback(
-    (order: string) => {
-      setSearchParams(prev => {
-        prev.set("order", order);
-        return prev;
-      });
-    },
-    [setSearchParams]
-  );
+  const handleSortBy = (order: string) => {
+    updateQuery("order", order);
+  };
 
   const handleFilterByCategories = (category: string) => {
-    setSearchParams(prev => {
-      prev.set("category", category);
-      prev.set("skip", "0");
-      return prev;
-    });
+    updateQuery("category", category);
+    updateQuery("skip", "0");
   };
 
   const handleClearFilters = () => {
-    setSearchParams(prev => {
-      prev.set("limit", "32");
-      prev.set("skip", "0");
-      prev.set("sortBy", "price");
-      prev.set("order", "asc");
-      prev.delete("category");
-      return prev;
-    });
+    resetQuery();
   };
 
   if (isLoading) {
@@ -91,11 +69,7 @@ const Products = () => {
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setSearchParams={setSearchParams}
-          />
+          <Pagination totalPages={totalPages} currentPage={currentPage} />
         )}
       </section>
     </main>

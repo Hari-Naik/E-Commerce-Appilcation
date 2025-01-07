@@ -6,26 +6,44 @@ import Loading from "../components/Loading/Loading";
 
 import { useProductsByCategory } from "../hooks/useProductsByCategory";
 
+import { ProductType } from "../types/definations";
+
+const categories = [
+  "laptops",
+  "tablets",
+  "smartphones",
+  "womes-dresses",
+  "womens-bags",
+  "womens-jewellery",
+  "mens-shirts",
+  "furniture",
+];
+
+type Products = {
+  [key: string]: ProductType[];
+};
+
 const Home = () => {
-  const { data: laptops } = useProductsByCategory("laptops");
-  const { data: tablets } = useProductsByCategory("tablets");
-  const { data: smartphones } = useProductsByCategory("smartphones");
-  const { data: womensDresses } = useProductsByCategory("womens-dresses");
-  const { data: womensBags } = useProductsByCategory("womens-bags");
-  const { data: womensJewellery } = useProductsByCategory("womens-jewellery");
-  const { data: mensShirts } = useProductsByCategory("mens-shirts");
-  const {
-    isLoading,
-    data: furniture,
-    error,
-  } = useProductsByCategory("furniture");
+  const queries = useProductsByCategory(categories);
+  const isLoading = queries.some(query => query.isLoading);
+  const error = queries.find(query => query.error)?.error;
 
   if (isLoading) {
     return <Loading />;
   }
+
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div className="w-full h-[calc(100vh-124px)] md:h-[calc(100vh-66px)] flex items-center justify-center">
+        {error?.message}
+      </div>
+    );
   }
+
+  const products = categories.reduce((acc, category, index) => {
+    acc[category] = queries[index]?.data?.products || [];
+    return acc;
+  }, {} as Products);
 
   return (
     <main className="flex flex-col md:gap-4 md:px-3 md:pt-2 pb-10">
@@ -37,7 +55,7 @@ const Home = () => {
         <div className="w-full xl:w-[80%]">
           <ProductsSlider
             text="Top Deals on Laptops & Tablets"
-            products={[...laptops.products, ...tablets.products]}
+            products={[...products["laptops"], ...products["tablets"]]}
             slidesPerView={5}
           />
         </div>
@@ -54,7 +72,7 @@ const Home = () => {
       <div className="w-full h-fit grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.3fr_2fr] sm:gap-1 md:gap-2">
         <ProductsCard
           title="Furniture Deals"
-          products={furniture?.products}
+          products={products["furniture"]}
           bgColor="bg-[#bceefe]"
         />
         <div className="hidden lg:block relative flex-1 h-[590px]">
@@ -67,7 +85,7 @@ const Home = () => {
         <div className="lg:hidden">
           <ProductsCard
             title="Men's Fashion"
-            products={mensShirts?.products}
+            products={products["mens-shirts"]}
             bgColor="bg-[#fc88a4] md:bg-white"
           />
         </div>
@@ -76,12 +94,12 @@ const Home = () => {
       <div className="w-full h-fit grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
         <ProductsCard
           title="Men's Fashion"
-          products={mensShirts?.products}
+          products={products["mens-shirts"]}
           bgColor="bg-[#fff0a8]"
         />
         <ProductsCard
           title="Explore New Styles"
-          products={mensShirts?.products}
+          products={products["mens-shirts"]}
           bgColor="bg-[#fc88a4]"
         />
         <div className="hidden lg:block relative flex-1 h-[590px]">
@@ -95,14 +113,14 @@ const Home = () => {
 
       <ProductsSlider
         text="Best Deals on Smartphones"
-        products={smartphones?.products}
+        products={products["smartphones"]}
       />
       <ProductsSlider
         text="Fashion Top Deals"
         products={[
-          ...womensDresses.products,
-          ...womensBags.products,
-          ...womensJewellery.products,
+          ...products["womes-dresses"],
+          ...products["womens-bags"],
+          ...products["womens-jewellery"],
         ]}
       />
     </main>

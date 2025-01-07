@@ -9,13 +9,15 @@ import MoreLinksDropDown from "./MoreLinksDropDown";
 import AccountDropDown from "./AccountDropDown";
 import { useAppSelector } from "../../app/hooks";
 
-import { useAuth } from "../../hooks/useAuth";
+// import { useAuth } from "../../hooks/useAuth";
+import { useToken } from "../../hooks/useToken";
 
 const NavItems = () => {
   const cart = useAppSelector(state => state.cart.cart);
   const navigate = useNavigate();
-  const { user } = useAuth();
-  console.log("auth", user);
+  const { token } = useToken();
+  //   const { user } = useAuth();
+  //   console.log("auth", user);
 
   const handleNaviageToLoginPage = () => {
     navigate("/account/login");
@@ -27,9 +29,9 @@ const NavItems = () => {
       <div className="relative group">
         <div className="flex items-center gap-2 md:group-hover:bg-[#2a55e5] md:group-hover:text-white p-2 rounded-lg">
           <RxAvatar className="w-6 h-6" />
-          <span className="hidden md:block">{user ? "Account" : "Login"}</span>
+          <span className="hidden md:block">{token ? "Account" : "Login"}</span>
           <span onClick={handleNaviageToLoginPage} className="md:hidden">
-            {user ? "You" : "Login"}
+            {token ? "You" : "Login"}
           </span>
           <FaChevronDown className="w-3 h-3 hidden md:block group-hover:rotate-180 transition duration-500" />
         </div>

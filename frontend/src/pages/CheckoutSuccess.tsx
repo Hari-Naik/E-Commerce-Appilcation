@@ -17,7 +17,7 @@ const CheckoutSuccess = () => {
           Now you can view your Orders or continue Shopping with us
         </p>
         <div className="flex items-center gap-x-5">
-          <Link to={"/orders"}>
+          <Link to={"/account/orders"}>
             <button className="w-52 h-12 rounded border text-sm uppercase font-semibold hover:border-[#212121] duration-300">
               View Orders
             </button>

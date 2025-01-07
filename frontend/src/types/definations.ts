@@ -39,3 +39,35 @@ export interface CategoryType {
   name: string;
   url: string;
 }
+
+export interface OrderItem {
+  productId: number;
+  title: string;
+  price: number;
+  discountPercentage: number;
+  thumbnail: string;
+  quantity: number;
+  _id: string;
+}
+export interface Order {
+  shippingAddress: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+  _id: string;
+  stripeSessionId: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: "pending" | "completed" | "failed";
+  customerDetails: {
+    email: string;
+    name: string;
+    phone: string;
+  };
+  orderId: string;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -11,14 +11,15 @@ const Wishlist = lazy(() => import("./pages/Wishlist"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 const Orders = lazy(() => import("./pages/Orders"));
+const OrderDetails = lazy(() => import("./pages/OrderDetails"));
 
 import Header from "./components/Header/Header";
 import BackToTop from "./components/BackToTop/BackToTop";
 import Loading from "./components/Loading/Loading";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from "./pages/ProtectedRoute";
 
 const App = () => {
   return (
@@ -36,12 +37,19 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/account/orders" element={<Orders />} />
+            <Route path="/order_details" element={<OrderDetails />} />
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
-      <ToastContainer position="bottom-center" theme="dark" hideProgressBar />
+      <ToastContainer
+        position="bottom-center"
+        theme="dark"
+        hideProgressBar
+        newestOnTop
+        autoClose={3000}
+      />
     </BrowserRouter>
   );
 };

@@ -57,7 +57,8 @@ const SignUp: FC<SignUpProps> = ({ handleAuthChange, setIsLogin }) => {
       );
 
       const user = userCredential.user;
-
+      console.log("user cred", userCredential);
+      console.log("user", user.uid);
       await setDoc(doc(db, "users", user.uid), {
         userId: user.uid,
         username: formData.username,
@@ -81,7 +82,6 @@ const SignUp: FC<SignUpProps> = ({ handleAuthChange, setIsLogin }) => {
         default:
           errorMessage = "An error occurred. Please try again.";
       }
-      console.log("Error", error);
       toast.error(errorMessage);
     }
   };

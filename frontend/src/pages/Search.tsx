@@ -1,19 +1,14 @@
-import { useCallback, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 import { useSearch } from "../hooks/useSearch";
 import Breadcrumbs from "../components/Breadcrumbs/BreadCrumbs";
 import SortBy from "../components/Products/SortBy";
 import ProductsList from "../components/Products/ProductsList";
 import Pagination from "../components/Pagination/Pagination";
 import { SearchSkelton } from "../components/Loading/Skeltons";
+import { useQueryParams } from "../hooks/useQueryParams";
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams({
-    limit: "32",
-    skip: "0",
-    sortBy: "price",
-    order: "asc",
-  });
+  const { searchParams, updateQuery } = useQueryParams();
 
   const skip = +(searchParams.get("skip") as string);
   const sortBy = searchParams.get("sortBy") || "price";
@@ -23,18 +18,11 @@ const Search = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // window.scrollTo(0, 0);
   }, [skip, sortBy, order]);
 
-  const handleSortBy = useCallback(
-    (order: string) => {
-      setSearchParams(prev => {
-        prev.set("order", order);
-        return prev;
-      });
-    },
-    [setSearchParams]
-  );
+  const handleSortBy = (order: string) => {
+    updateQuery("order", order);
+  };
 
   if (isLoading) {
     return <SearchSkelton />;
@@ -57,11 +45,7 @@ const Search = () => {
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setSearchParams={setSearchParams}
-          />
+          <Pagination totalPages={totalPages} currentPage={currentPage} />
         )}
       </div>
     </section>

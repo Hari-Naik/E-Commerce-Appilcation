@@ -1,36 +1,26 @@
 import React from "react";
-import { SetURLSearchParams } from "react-router-dom";
 import { generatePages } from "../../lib/utility";
+import { useQueryParams } from "../../hooks/useQueryParams";
 
 type PropTypes = {
   currentPage: number;
   totalPages: number;
-  setSearchParams: SetURLSearchParams;
 };
 
-const Pagination: React.FC<PropTypes> = ({
-  currentPage,
-  totalPages,
-  setSearchParams,
-}) => {
+const Pagination: React.FC<PropTypes> = ({ currentPage, totalPages }) => {
+  const { updateQuery } = useQueryParams();
+
   const handlePagination = (page: number) => {
-    setSearchParams(prev => {
-      prev.set("skip", (32 * (page - 1)).toString());
-      return prev;
-    });
+    return function () {
+      updateQuery("skip", (32 * (page - 1)).toString());
+    };
   };
 
   const handlePrevButton = () => {
-    setSearchParams(prev => {
-      prev.set("skip", (32 * (currentPage - 2)).toString());
-      return prev;
-    });
+    updateQuery("skip", (32 * (currentPage - 2)).toString());
   };
   const handleNextButton = () => {
-    setSearchParams(prev => {
-      prev.set("skip", (32 * currentPage).toString());
-      return prev;
-    });
+    updateQuery("skip", (32 * currentPage).toString());
   };
 
   const activeStyles = "bg-[#2874f0] text-white";
@@ -58,7 +48,8 @@ const Pagination: React.FC<PropTypes> = ({
             <button
               type="button"
               key={page}
-              onClick={() => handlePagination(page)}
+              //   onClick={() => handlePagination(page)}
+              onClick={handlePagination(page)}
               className={`w-8 h-8 rounded-full text-sm font-medium outline-none ${
                 isActive ? activeStyles : inActiveStyles
               }`}>

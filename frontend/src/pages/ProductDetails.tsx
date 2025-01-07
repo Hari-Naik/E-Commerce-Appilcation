@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Breadcrumbs from "../components/Breadcrumbs/BreadCrumbs";
@@ -9,19 +9,20 @@ import ProductReviews from "../components/Product/ProductReviews";
 import { ProductDetailsSkelton } from "../components/Loading/Skeltons";
 
 import { addToCart } from "../features/cart/cartSlice";
-import { addToWishlist } from "../features/wishlist/wishlistSlice";
-
-import { toast } from "react-toastify";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../features/wishlist/wishlistSlice";
 
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useProductById } from "../hooks/useProductById";
-import { useAuth } from "../hooks/useAuth";
+import { useToken } from "../hooks/useToken";
 
+import { toast } from "react-toastify";
 const ProductDetails = () => {
   const { productId } = useParams();
   const [activeImageURL, setActiveImageURL] = useState<string>("");
-  const [isFavourite, setIsFavourite] = useState<boolean>(false);
-  const { user } = useAuth();
+  const { token } = useToken();
 
   const cart = useAppSelector(state => state.cart.cart);
   const wishlist = useAppSelector(state => state.wishlist);
@@ -30,19 +31,18 @@ const ProductDetails = () => {
   const navigate = useNavigate();
 
   const { isLoading, data: productDetails, error } = useProductById(productId!);
-  const isInCart =
-    cart.findIndex(item => item.id === productDetails?.id) !== -1
-      ? true
-      : false;
+
+  const isInCart = useMemo(() => {
+    return cart.some(item => item.id === productDetails?.id);
+  }, [cart, productDetails]);
+
+  const isFavourite = useMemo(() => {
+    return wishlist.some(item => item.id === productDetails?.id);
+  }, [wishlist, productDetails]);
 
   useEffect(() => {
     if (productDetails?.images.length) {
       setActiveImageURL(productDetails?.images[0]);
-      const index = wishlist.findIndex(item => item.id === productDetails.id);
-
-      if (index >= 0) {
-        setIsFavourite(true); // Set to true if the product is in wishlist
-      }
     }
   }, [productDetails]);
 
@@ -61,13 +61,14 @@ const ProductDetails = () => {
   };
 
   const handleAddToWishlist = () => {
-    if (!isFavourite && user) {
-      setIsFavourite(true);
+    if (!isFavourite && token) {
       dispatch(addToWishlist(productDetails!));
       toast.success("Added to your wishlist");
+    } else if (isFavourite) {
+      dispatch(removeFromWishlist(Number(productId)));
+      toast.success("Removed from your wishlist");
     } else {
       toast.error("Please login for wishlisting a product");
-      navigate("/account/login");
     }
   };
 

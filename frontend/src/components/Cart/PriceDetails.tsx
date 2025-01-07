@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ProductType } from "../../types/definations";
 import { getDiscountPrice } from "../../lib/utility";
 
@@ -6,26 +6,33 @@ type PriceDetailsProps = {
   cart: ProductType[];
 };
 const PriceDetails: React.FC<PriceDetailsProps> = ({ cart }) => {
-  const price = cart.reduce(
-    (acc, item) => acc + item.price * (item.quantity || 1),
-    0
+  const price = useMemo(
+    () =>
+      cart.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0),
+    [cart]
   );
 
   //calculating price after discount
-  const totalAmount = cart.reduce((acc, item) => {
-    if (item.quantity) {
-      return (
-        acc +
-        getDiscountPrice(
-          item.price * item.quantity,
-          item.discountPercentage + (item.quantity - 1)
-        )
-      );
-    }
-    return 0;
-  }, 0);
+  const totalAmount = useMemo(
+    () =>
+      cart.reduce((acc, item) => {
+        if (item.quantity) {
+          return (
+            acc +
+            getDiscountPrice(
+              item.price * item.quantity,
+              item.discountPercentage + (item.quantity - 1)
+            )
+          );
+        }
+
+        return 0;
+      }, 0),
+    [cart]
+  );
 
   const discount = (price - totalAmount).toFixed(2);
+
   return (
     <div className="w-full md:w-[50%] h-fit bg-white rounded-[5px] md:sticky md:top-[78px]">
       <h2 className="py-[13px] px-3 md:px-6 border-b border-gray-200 uppercase text-base text-[#878787] font-medium">
