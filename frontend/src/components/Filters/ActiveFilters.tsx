@@ -1,9 +1,8 @@
 import React from "react";
-import { BsStarFill } from "react-icons/bs";
 
 type PropTypes = {
   activeCategory: string;
-  activeRating: number | null;
+  activeRating: string;
   handleClearFilters: () => void;
 };
 
@@ -31,9 +30,7 @@ const ActiveFilters: React.FC<PropTypes> = ({
           )}
           {activeRating && (
             <div className="flex items-center gap-1 bg-[#e0e0e0] p-1 rounded-sm text-xs text-[#212121]">
-              <span>{activeRating}</span>
-              <BsStarFill className="h-2" />
-              <span>& above</span>
+              <span>Rating--{activeRating}</span>
             </div>
           )}
         </div>

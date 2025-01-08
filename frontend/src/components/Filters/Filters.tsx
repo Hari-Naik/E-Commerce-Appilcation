@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
-import AllCategories from "./AllCategories";
-import CustomerRatings from "./CustomerRatings";
 import ActiveFilters from "./ActiveFilters";
 import { CategoryType } from "../../types/definations";
+
+import CustomerRatings from "./Ratings/CustomerRatings";
+import Categories from "./Categories/Categories";
 
 type PropTypes = {
   categories: CategoryType[];
@@ -17,10 +18,9 @@ const Filters: React.FC<PropTypes> = ({
   onClearFilters,
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>("");
-  const [activeRating, setActiveRating] = useState<number | null>(null);
+  const [activeRating, setActiveRating] = useState<string>("");
 
-  const handleActiveRating = (rating: number) => {
-    // sortProductsByRating(rating);
+  const handleActiveRating = (rating: string) => {
     setActiveRating(rating);
   };
 
@@ -31,7 +31,7 @@ const Filters: React.FC<PropTypes> = ({
 
   const handleClearFilters = () => {
     setActiveCategory("");
-    setActiveRating(null);
+    setActiveRating("");
     onClearFilters();
   };
 
@@ -42,7 +42,7 @@ const Filters: React.FC<PropTypes> = ({
         activeRating={activeRating}
         handleClearFilters={handleClearFilters}
       />
-      <AllCategories
+      <Categories
         categories={categories}
         activeCategory={activeCategory}
         handleActiveCategory={handleActiveCategory}

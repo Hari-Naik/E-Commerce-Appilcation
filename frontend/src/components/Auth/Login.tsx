@@ -13,17 +13,8 @@ import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-
-const loginSchema = z.object({
-  email: z.string().email("Email is required"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters long")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-    ),
-});
+import { FirebaseError } from "firebase/app";
+import { loginSchema } from "../../schemas/login";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -50,25 +41,27 @@ const Login: FC<LoginProps> = ({ handleAuthChange }) => {
       Cookies.set("token", token, { expires: 30 });
       toast.success("Login successful");
       navigate(-1);
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage;
-      switch (error.code) {
-        case "auth/user-not-found":
-          errorMessage = "No user found with this email.";
-          break;
-        case "auth/wrong-password":
-          errorMessage = "Incorrect password.";
-          break;
-        case "auth/invalid-email":
-          errorMessage = "Invalid email address.";
-          break;
-        case "auth/invalid-credential":
-          errorMessage = "Email or Password not matched";
-          break;
-        default:
-          errorMessage = "An error occurred. Please try again.";
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            errorMessage = "No user found with this email.";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Incorrect password.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Invalid email address.";
+            break;
+          case "auth/invalid-credential":
+            errorMessage = "Email or Password not matched";
+            break;
+          default:
+            errorMessage = "An error occurred. Please try again.";
+        }
       }
-      console.log("Error", error);
+
       toast.error(errorMessage);
     }
   };

@@ -1,28 +1,31 @@
-import { FC } from "react";
-import { FieldError, UseFormRegister } from "react-hook-form";
+import {
+  FieldError,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from "react-hook-form";
 
-type FormState = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type InputProps = {
+type InputProps<T extends FieldValues> = {
   type: string;
-  name: "username" | "email" | "password";
+  name: Path<T>;
   label: string;
-  register: UseFormRegister<FormState>;
-  error: FieldError | undefined;
+  register: UseFormRegister<T>;
+  error?: FieldError;
 };
 
-const Input: FC<InputProps> = ({ type, name, label, register, error }) => {
+const Input = <T extends FieldValues>({
+  type,
+  name,
+  label,
+  register,
+  error,
+}: InputProps<T>) => {
   return (
     <div className="mb-6">
       <label className="relative cursor-text">
         <input
           {...register(name)}
           type={type}
-          name={name}
           className="input"
           placeholder=" "
         />
@@ -30,7 +33,11 @@ const Input: FC<InputProps> = ({ type, name, label, register, error }) => {
           {label}
         </span>
       </label>
-      <span className="text-xs text-red-500 font-medium">{error?.message}</span>
+      {error && (
+        <span className="text-xs text-red-500 font-medium">
+          {error.message}
+        </span>
+      )}
     </div>
   );
 };

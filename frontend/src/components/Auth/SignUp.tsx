@@ -12,27 +12,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
-const signupSchema = z
-  .object({
-    username: z
-      .string()
-      .min(4, "Username must be at least 4 characters long")
-      .max(20, "Username must be at most 20 characters long")
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        "Username can only contain letters, numbers, and underscores"
-      ),
-    email: z.string().email("Email is required"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      ),
-  })
-  .required();
+import { FirebaseError } from "firebase/app";
+import { signupSchema } from "../../schemas/signup";
 
 export type SignUpFormData = z.infer<typeof signupSchema>;
 
@@ -57,8 +38,6 @@ const SignUp: FC<SignUpProps> = ({ handleAuthChange, setIsLogin }) => {
       );
 
       const user = userCredential.user;
-      console.log("user cred", userCredential);
-      console.log("user", user.uid);
       await setDoc(doc(db, "users", user.uid), {
         userId: user.uid,
         username: formData.username,
@@ -67,20 +46,22 @@ const SignUp: FC<SignUpProps> = ({ handleAuthChange, setIsLogin }) => {
       });
       setIsLogin(true);
       toast.success("User created successfully. Please login!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage;
-      switch (error.code) {
-        case "auth/invalid-email":
-          errorMessage = "Please enter a valid email.";
-          break;
-        case "auth/missing-password":
-          errorMessage = "Please enter a password.";
-          break;
-        case "auth/email-already-in-use":
-          errorMessage = "This email is already in use. Try another email.";
-          break;
-        default:
-          errorMessage = "An error occurred. Please try again.";
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case "auth/invalid-email":
+            errorMessage = "Please enter a valid email.";
+            break;
+          case "auth/missing-password":
+            errorMessage = "Please enter a password.";
+            break;
+          case "auth/email-already-in-use":
+            errorMessage = "This email is already in use. Try another email.";
+            break;
+          default:
+            errorMessage = "An error occurred. Please try again.";
+        }
       }
       toast.error(errorMessage);
     }

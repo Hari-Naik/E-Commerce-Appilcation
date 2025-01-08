@@ -27,7 +27,8 @@ const Products = () => {
   const { data: categories } = useCategories();
   const { isLoading, data, error } = useProducts(skip, sortBy, order, category);
 
-  const handleSortBy = (order: string) => {
+  const handleSortBy = (sortBy: string, order: string) => {
+    updateQuery("sortBy", sortBy);
     updateQuery("order", order);
   };
 
@@ -65,7 +66,10 @@ const Products = () => {
           limit={data.limit}
           totalProducts={data.total}
         />
-        <SortBy order={order} onSortByChange={handleSortBy} />
+        <SortBy
+          order={sortBy === "price" ? order : "asc"}
+          onSortByChange={handleSortBy}
+        />
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (
