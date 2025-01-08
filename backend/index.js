@@ -22,6 +22,10 @@ app.use(cors());
 //connectDB
 connectDB();
 
+app.get("/", () => {
+  res.send("E-commerce Backend API");
+});
+
 //routes
 app.use("/api", paymentRoutes);
 app.use("/api/orders", orderRoutes);
