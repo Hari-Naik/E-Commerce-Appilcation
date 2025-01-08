@@ -16,7 +16,7 @@ const Orders = () => {
     queryKey: ["orders", user?.email],
     queryFn: async (): Promise<Order[]> => {
       const response = await fetch(
-        `http://localhost:7000/api/orders/${user?.email}`
+        `https://hari-ecommerce-backend.vercel.app/api/orders/${user?.email}`
       );
       if (!response.ok) throw new Error("Failed to fetch orders.");
       return response.json();

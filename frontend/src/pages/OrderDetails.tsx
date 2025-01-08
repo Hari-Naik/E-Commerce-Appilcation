@@ -20,7 +20,7 @@ const OrderDetails = () => {
     queryKey: ["order", orderId],
     queryFn: async (): Promise<Order> => {
       const response = await fetch(
-        `http://localhost:7000/api/orders/order/${orderId}`
+        `https://hari-ecommerce-backend.vercel.app/api/orders/order/${orderId}`
       );
       if (!response.ok) throw new Error("Failed to fetch orders.");
       return response.json();

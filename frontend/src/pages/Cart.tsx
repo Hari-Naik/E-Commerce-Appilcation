@@ -32,7 +32,7 @@ const Cart = () => {
       };
 
       const response = await fetch(
-        "http://localhost:7000/api/create-checkout-session",
+        "https://hari-ecommerce-backend.vercel.app/api/create-checkout-session",
         options
       );
 

@@ -80,34 +80,37 @@ const ProductDetails = () => {
   }
 
   return (
-    <section className="container min-h-[580px] mx-auto grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-2 bg-white shadow-sm md:mt-3 mb-5">
+    <section className="w-full h-full flex items-center justify-center">
       {/* product images */}
-      <div className="p-3">
-        <ImageGallery
-          images={productDetails?.images || []}
-          activeImageURL={activeImageURL}
-          onImageChange={handleImageChange}
-        />
-        <ActionButtons
-          handleAddToCart={handleAddToCart}
-          handleAddToWishlist={handleAddToWishlist}
-          isInCart={isInCart}
-          isFavourite={isFavourite}
-        />
-      </div>
 
-      <div className="h-2 bg-[#f1f2f4] md:hidden"></div>
-
-      {/* product Info */}
-      <div className="flex flex-col p-3">
-        <Breadcrumbs />
-        <ProductInfo product={productDetails!} />
-        {productDetails?.reviews && (
-          <ProductReviews
-            overallRating={productDetails?.rating}
-            reviews={productDetails?.reviews}
+      <div className="container min-h-[580px] grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-2 bg-white shadow-sm md:mt-3 mb-5">
+        <div className="p-3">
+          <ImageGallery
+            images={productDetails?.images || []}
+            activeImageURL={activeImageURL}
+            onImageChange={handleImageChange}
           />
-        )}
+          <ActionButtons
+            handleAddToCart={handleAddToCart}
+            handleAddToWishlist={handleAddToWishlist}
+            isInCart={isInCart}
+            isFavourite={isFavourite}
+          />
+        </div>
+
+        <div className="h-2 bg-[#f1f2f4] md:hidden"></div>
+
+        {/* product Info */}
+        <div className="flex flex-col p-3">
+          <Breadcrumbs />
+          <ProductInfo product={productDetails!} />
+          {productDetails?.reviews && (
+            <ProductReviews
+              overallRating={productDetails?.rating}
+              reviews={productDetails?.reviews}
+            />
+          )}
+        </div>
       </div>
     </section>
   );
