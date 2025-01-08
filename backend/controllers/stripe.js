@@ -1,7 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Order = require("../models/Order");
 
-const YOUR_DOMAIN = "http://localhost:5173";
+const YOUR_DOMAIN = "https://hari-ecommerce-application.vercel.app";
 const endpointSecret =
   "whsec_d8955fdbc45024be9d0a5e13476635236d0a57f37c871fcf5e780c1b83fd67a7";
 
@@ -37,8 +37,7 @@ const handleCheckout = async (req, res) => {
       mode: "payment",
       line_items: lineItems,
       phone_number_collection: {
-		  enabled: true,
-		  
+        enabled: true,
       },
       success_url: `${YOUR_DOMAIN}/checkout-success`,
       cancel_url: `${YOUR_DOMAIN}/viewcart`,
