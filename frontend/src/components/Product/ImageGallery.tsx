@@ -12,8 +12,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   onImageChange,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-2">
-      <ul className="flex md:flex-col gap-1 order-2 md:order-1">
+    <div className="flex flex-col lg:flex-row gap-2">
+      <ul className="flex lg:flex-col gap-1 order-2 lg:order-1">
         {images?.map((imageUrl, index) => (
           <li
             key={`thumb-${index}`}
@@ -30,7 +30,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
           </li>
         ))}
       </ul>
-      <div className="w-full h-[448px] flex items-center justify-center order-1 md:order-2 bg-[#f5f5f5] p-10">
+      <div className="w-full aspect-square max-h-[448px] flex items-center justify-center order-1 lg:order-2 bg-[#f5f5f5] p-10">
         <img
           src={activeImageURL}
           alt="Active product image"

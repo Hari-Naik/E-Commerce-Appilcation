@@ -6,6 +6,7 @@ import ProductsList from "../components/Products/ProductsList";
 import Pagination from "../components/Pagination/Pagination";
 import { SearchSkelton } from "../components/Loading/Skeltons";
 import { useQueryParams } from "../hooks/useQueryParams";
+import Error from "../components/Error";
 
 const Search = () => {
   const { searchParams, updateQuery } = useQueryParams();
@@ -14,7 +15,12 @@ const Search = () => {
   const sortBy = searchParams.get("sortBy") || "price";
   const order = searchParams.get("order") || "asc";
   const query = searchParams.get("q")!;
-  const { isLoading, error, data } = useSearch(query, skip, sortBy, order);
+  const { isLoading, error, data, refetch } = useSearch(
+    query,
+    skip,
+    sortBy,
+    order
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -28,7 +34,7 @@ const Search = () => {
     return <SearchSkelton />;
   }
   if (error) {
-    return <div>{error.message}</div>;
+    return <Error errorMessage={error.message} refetch={refetch} />;
   }
 
   const totalPages = Math.ceil(data.total / 32);

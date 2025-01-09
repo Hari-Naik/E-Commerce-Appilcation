@@ -7,6 +7,7 @@ import Loading from "../components/Loading/Loading";
 import { useProductsByCategory } from "../hooks/useProductsByCategory";
 
 import { ProductType } from "../types/definations";
+import Error from "../components/Error";
 
 const categories = [
   "laptops",
@@ -33,11 +34,7 @@ const Home = () => {
   }
 
   if (error) {
-    return (
-      <div className="w-full h-[calc(100vh-124px)] md:h-[calc(100vh-66px)] flex items-center justify-center">
-        {error?.message}
-      </div>
-    );
+    return <Error errorMessage={error.message} />;
   }
 
   const products = categories.reduce((acc, category, index) => {

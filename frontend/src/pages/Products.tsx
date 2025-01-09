@@ -11,6 +11,7 @@ import BreadCrumbs from "../components/Breadcrumbs/BreadCrumbs";
 import Pagination from "../components/Pagination/Pagination";
 import { ProductsSkelton } from "../components/Loading/Skeltons";
 import { useQueryParams } from "../hooks/useQueryParams";
+import Error from "../components/Error";
 
 const Products = () => {
   const { searchParams, updateQuery, resetQuery } = useQueryParams();
@@ -25,7 +26,12 @@ const Products = () => {
   }, [skip, sortBy, category, order]);
 
   const { data: categories } = useCategories();
-  const { isLoading, data, error } = useProducts(skip, sortBy, order, category);
+  const { isLoading, data, error, refetch } = useProducts(
+    skip,
+    sortBy,
+    order,
+    category
+  );
 
   const handleSortBy = (sortBy: string, order: string) => {
     updateQuery("sortBy", sortBy);
@@ -45,7 +51,7 @@ const Products = () => {
     return <ProductsSkelton />;
   }
   if (error) {
-    return <div>{error.message}</div>;
+    return <Error errorMessage={error.message} refetch={refetch} />;
   }
 
   const totalPages = Math.ceil(data.total / 32);

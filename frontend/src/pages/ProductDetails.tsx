@@ -19,6 +19,7 @@ import { useProductById } from "../hooks/useProductById";
 import { useToken } from "../hooks/useToken";
 
 import { toast } from "react-toastify";
+import Error from "../components/Error";
 const ProductDetails = () => {
   const { productId } = useParams();
   const [activeImageURL, setActiveImageURL] = useState<string>("");
@@ -30,7 +31,12 @@ const ProductDetails = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, data: productDetails, error } = useProductById(productId!);
+  const {
+    isLoading,
+    data: productDetails,
+    error,
+    refetch,
+  } = useProductById(productId!);
 
   const isInCart = useMemo(() => {
     return cart.some(item => item.id === productDetails?.id);
@@ -76,14 +82,14 @@ const ProductDetails = () => {
     return <ProductDetailsSkelton />;
   }
   if (error) {
-    return <div>{error.message}</div>;
+    return <Error errorMessage={error.message} refetch={refetch} />;
   }
 
   return (
     <section className="w-full h-full flex items-center justify-center">
       {/* product images */}
 
-      <div className="container min-h-[580px] grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-2 bg-white shadow-sm md:mt-3 mb-5">
+      <div className="w-full md:max-w-[90%] grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-2 bg-white shadow-sm mb-5 md:mt-3">
         <div className="p-3">
           <ImageGallery
             images={productDetails?.images || []}

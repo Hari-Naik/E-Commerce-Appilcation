@@ -32,6 +32,7 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "completed", "failed"],
       default: "completed",
     },
+
     customerDetails: {
       email: {
         type: String,
@@ -59,7 +60,6 @@ const orderSchema = new mongoose.Schema(
 
 // Hooks
 orderSchema.pre("save", function (next) {
-  console.log("Generating orderId....");
   if (this.isNew && !this.orderId) {
     // Generate unique order number logic here
     this.orderId = "OD" + Date.now() + Math.floor(Math.random() * 1000);

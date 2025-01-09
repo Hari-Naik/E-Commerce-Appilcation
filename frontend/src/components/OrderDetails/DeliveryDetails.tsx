@@ -6,7 +6,7 @@ type DeliveyAdressProps = {
 
 const DeliveryAddress: React.FC<DeliveyAdressProps> = ({ order }) => {
   return (
-    <div className="container h-max bg-white shadow-md rounded p-6 order-2 md:order-1">
+    <div className="w-full md:max-w-[90%] h-max bg-white shadow-md rounded p-6 order-2 md:order-1">
       <h2 className="text-xs text-[#212121] opacity-40 md:text-base md:font-medium md:opacity-100 mb-2">
         Delivery Address
       </h2>

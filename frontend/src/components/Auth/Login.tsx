@@ -96,6 +96,16 @@ const Login: FC<LoginProps> = ({ handleAuthChange }) => {
           styles="text-sm text-[#2874f0] font-medium"
         />
       </form>
+      <div>
+        <h1 className="text-sm text-[#212121] font-medium">Credentials</h1>
+        <p className="text-sm text-[#212121] font-medium">
+          email:{" "}
+          <span className="text-xs text-[#878787]">john.doe@gmail.com</span>
+        </p>
+        <p className="text-sm text-[#212121] font-medium">
+          Password: <span className="text-xs text-[#878787]">John@123</span>
+        </p>
+      </div>
     </div>
   );
 };

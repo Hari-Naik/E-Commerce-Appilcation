@@ -1,19 +1,27 @@
 import type { OrderItem } from "../../types/definations";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa6";
-import { IoChatbubblesOutline } from "react-icons/io5";
+
+import { format } from "date-fns";
 
 type OrderItemProps = {
   item: OrderItem;
+  deliveredDate: string;
 };
 
-const OrderItem: React.FC<OrderItemProps> = ({ item }) => {
+const OrderItem: React.FC<OrderItemProps> = ({ item, deliveredDate }) => {
   return (
-    <div className="container h-max bg-white shadow-md rounded p-4 order-1 md:order-2">
-      <div className="flex flex-col md:flex-row">
-        <div className="flex items-center gap-2">
-          <Link to={`/products/${item.productId}`} className="w-[120px] h-full">
-            <img src={item.thumbnail} alt={item.title} className="md:-mt-6" />
+    <div className="w-full md:max-w-[90%] h-max bg-white shadow-md rounded order-1 md:order-2 p-4">
+      <div className="flex flex-col md:flex-row gap-3">
+        <div className="flex items-center gap-3">
+          <Link
+            to={`/products/${item.productId}`}
+            className="w-[120px] h-[120px]">
+            <img
+              src={item.thumbnail}
+              alt={item.title}
+              className="w-full h-full object-contain"
+            />
           </Link>
           <div className="flex flex-col gap-1 h-full">
             <Link to={`/products/${item.productId}`}>
@@ -26,14 +34,21 @@ const OrderItem: React.FC<OrderItemProps> = ({ item }) => {
             </span>
           </div>
         </div>
-        <div className="w-full h-full flex flow-row justify-between md:w-max md:flex-col md:gap-2 mx-auto text-sm font-medium cursor-pointer">
+
+        <div className="w-full h-full flex flex-col gap-1 md:w-max mx-auto text-sm font-medium cursor-pointer">
+          <div className="flex items-center gap-1">
+            <div className="h-2 w-2 bg-[#009300] rounded-full"></div>
+            <span>
+              Delivered on {format(new Date(deliveredDate), "MMM dd, yyyy")}
+            </span>
+          </div>
+          <span className="text-xs text-[#212121] font-normal">
+            Your item has been delivered.
+          </span>
+
           <div className="flex items-center gap-2 text-[#2874f0]">
             <FaStar className="h-4 w-4" />
             <span>Rate & Review Product</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <IoChatbubblesOutline className="h-4 w-4" />
-            <span className="text-[#2874f0]">Chat with us</span>
           </div>
         </div>
       </div>

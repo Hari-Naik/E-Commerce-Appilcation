@@ -2,11 +2,24 @@ const Order = require("../models/Order");
 
 const getOrdersByCustomerEmail = async (req, res) => {
   try {
-    const orders = await Order.find({
-      customerEmail: req.params.customerEmail,
-    }).sort({ createdAt: -1 });
+    const { customerEmail } = req.params;
+    console.log(customerEmail);
 
-    res.status(200).json(orders);
+    const orders = await Order.find({ "customerDetails.email": customerEmail });
+
+    console.log(orders);
+
+    if (orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found for this customer",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
   } catch (err) {
     console.error("Error fetching orders:", err);
     res.status(500).json({ error: "Failed to fetch orders" });
