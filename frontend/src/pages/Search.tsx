@@ -26,8 +26,8 @@ const Search = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [skip, sortBy, order]);
 
-  const handleSortByPrice = (order: string) => {
-    updateQuery("sortBy", "price");
+  const handleSortByPrice = (sortBy: string, order: string) => {
+    updateQuery(sortBy, "price");
     updateQuery("order", order);
   };
 
