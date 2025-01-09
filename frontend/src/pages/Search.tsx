@@ -26,7 +26,8 @@ const Search = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [skip, sortBy, order]);
 
-  const handleSortBy = (order: string) => {
+  const handleSortByPrice = (order: string) => {
+    updateQuery("sortBy", "price");
     updateQuery("order", order);
   };
 
@@ -47,7 +48,7 @@ const Search = () => {
         <h2 className="text-base text-[#212121] font-medium">
           Showing results for "{query}"
         </h2>
-        <SortBy order={order} onSortByChange={handleSortBy} />
+        <SortBy order={order} onSortByChange={handleSortByPrice} />
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (
