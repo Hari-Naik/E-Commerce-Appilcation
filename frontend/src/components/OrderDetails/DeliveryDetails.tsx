@@ -12,18 +12,18 @@ const DeliveryAddress: React.FC<DeliveyAdressProps> = ({ order }) => {
       </h2>
       <div className="flex flex-col gap-3">
         <span className="text-sm text-[#212121] font-medium">
-          {order?.customerDetails.name}
+          {order?.customerDetails?.name}
         </span>
         <div className="flex flex-col text-sm text-[#212121]">
-          <span>{order?.shippingAddress.street}</span>
+          <span>{order?.shippingAddress?.street}</span>
           <span>
-            {order?.shippingAddress.city} - {order?.shippingAddress.zipCode},{" "}
-            {order?.shippingAddress.state}
+            {order?.shippingAddress?.city} - {order?.shippingAddress?.zipCode},{" "}
+            {order?.shippingAddress?.state}
           </span>
         </div>
         <p className="text-sm text-[#212121] font-medium">
           Phone number{" "}
-          <span className="font-normal">{order?.customerDetails.phone}</span>
+          <span className="font-normal">{order?.customerDetails?.phone}</span>
         </p>
       </div>
     </div>

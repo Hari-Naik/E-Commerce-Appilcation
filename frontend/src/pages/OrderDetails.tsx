@@ -24,8 +24,7 @@ const OrderDetails = () => {
       const response = await fetch(
         `https://hari-ecommerce-backend.vercel.app/api/orders/order/${orderId}`
       );
-      if (!response.ok) throw new Error("Failed to fetch orders.");
-
+      if (!response.ok) throw new globalThis.Error("Failed to fetch orders.");
       return response.json();
     },
   });
@@ -35,10 +34,13 @@ const OrderDetails = () => {
   }
 
   if (error) {
-    return <Error errorMessage={error.message} refetch={refetch} />;
+    return <Error errorMessage={error?.message} refetch={refetch} />;
   }
 
   const item = order?.items?.find(item => item._id === itemId);
+
+  console.log("order", order);
+  console.log(error);
 
   return (
     <section className="w-full h-full flex flex-col items-center gap-2 md:gap-6 pt-2 md:pt-10">

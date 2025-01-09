@@ -9,28 +9,31 @@ type OrderItemProps = {
   deliveredDate: string;
 };
 
-const OrderItem: React.FC<OrderItemProps> = ({ item, deliveredDate }) => {
+const OrderItem: React.FC<OrderItemProps> = ({
+  item,
+  deliveredDate = new Date(),
+}) => {
   return (
     <div className="w-full md:max-w-[90%] h-max bg-white shadow-md rounded order-1 md:order-2 p-4">
       <div className="flex flex-col md:flex-row gap-3">
         <div className="flex items-center gap-3">
           <Link
-            to={`/products/${item.productId}`}
+            to={`/products/${item?.productId}`}
             className="w-[120px] h-[120px]">
             <img
-              src={item.thumbnail}
-              alt={item.title}
+              src={item?.thumbnail}
+              alt={item?.title}
               className="w-full h-full object-contain"
             />
           </Link>
           <div className="flex flex-col gap-1 h-full">
-            <Link to={`/products/${item.productId}`}>
+            <Link to={`/products/${item?.productId}`}>
               <span className="text-sm text-[#212121] hover:text-[#2847f0]">
-                {item.title}
+                {item?.title}
               </span>
             </Link>
             <span className="text-sm text-[#212121] font-medium">
-              ${item.price}
+              ${item?.price}
             </span>
           </div>
         </div>

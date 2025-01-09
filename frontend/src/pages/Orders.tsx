@@ -8,7 +8,7 @@ import SearchOrders from "../components/Orders/SearchOrders";
 
 const Orders = () => {
   const { user } = useUser();
-  console.log(user);
+
   const {
     isLoading,
     data: orders,
@@ -18,7 +18,7 @@ const Orders = () => {
     queryKey: ["orders", user?.email],
     queryFn: async (): Promise<Order[]> => {
       const response = await fetch(
-        `http://localhost:7000/api/orders/${user?.email}`
+        `https://hari-ecommerce-backend.vercel.app/api/orders/${user?.email}`
       );
       if (!response.ok) throw new Error("Failed to fetch orders.");
       return response.json();
