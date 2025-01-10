@@ -7,6 +7,7 @@ import DeliveryAddress from "../components/OrderDetails/DeliveryDetails";
 import OrderItem from "../components/OrderDetails/OrderItem";
 import Loading from "../components/Loading/Loading";
 import Error from "../components/Error";
+import Breadcrumbs from "../components/Breadcrumbs/BreadCrumbs";
 
 const OrderDetails = () => {
   const [searchParams] = useSearchParams();
@@ -39,11 +40,11 @@ const OrderDetails = () => {
 
   const item = order?.items?.find(item => item._id === itemId);
 
-  console.log("order", order);
-  console.log(error);
-
   return (
-    <section className="w-full h-full flex flex-col items-center gap-2 md:gap-6 pt-2 md:pt-10">
+    <section className="w-full h-full flex flex-col items-center gap-3 p-3 md:pt-10">
+      <div className="w-full md:max-w-[90%]">
+        <Breadcrumbs />
+      </div>
       <DeliveryAddress order={order!} />
       <OrderItem item={item!} deliveredDate={order?.createdAt as string} />
     </section>

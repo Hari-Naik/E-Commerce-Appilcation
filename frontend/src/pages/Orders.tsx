@@ -8,15 +8,11 @@ import SearchOrders from "../components/Orders/SearchOrders";
 
 const Orders = () => {
   const { user } = useUser();
+  console.log(user);
 
-  const {
-    isLoading,
-    data: orders,
-    error,
-    refetch,
-  } = useQuery({
+  const { isLoading, data, error, refetch } = useQuery({
     queryKey: ["orders", user?.email],
-    queryFn: async (): Promise<Order[]> => {
+    queryFn: async (): Promise<{ orders: Order[] }> => {
       const response = await fetch(
         `https://hari-ecommerce-backend.vercel.app/api/orders/${user?.email}`
       );
@@ -51,11 +47,13 @@ const Orders = () => {
   }
 
   return (
-    <div className="w-full py-10">
-      <div className="w-full sm:w-[80%] lg:w-[60%] mx-auto">
+    <div className="w-full sm:py-10 p-3">
+      <div className="w-full sm:w-[80%] lg:w-[60%] mx-auto flex flex-col gap-3">
         <Breadcrumbs />
         <SearchOrders />
-        <OrderItems orders={orders!} />
+        {data && data?.orders?.length > 0 && (
+          <OrderItems orders={data?.orders} />
+        )}
       </div>
     </div>
   );

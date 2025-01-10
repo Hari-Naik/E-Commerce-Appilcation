@@ -7,8 +7,6 @@ const getOrdersByCustomerEmail = async (req, res) => {
 
     const orders = await Order.find({ "customerDetails.email": customerEmail });
 
-    console.log(orders);
-
     if (orders.length === 0) {
       return res.status(404).json({
         success: false,
@@ -17,7 +15,6 @@ const getOrdersByCustomerEmail = async (req, res) => {
     }
 
     res.status(200).json({
-      success: true,
       orders,
     });
   } catch (err) {

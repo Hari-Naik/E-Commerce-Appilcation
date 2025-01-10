@@ -1,14 +1,4 @@
-import { useEffect, useState } from "react";
-import { auth } from "../firebase";
-import { User } from "firebase/auth";
-
 export const useUser = () => {
-  const [user, setUser] = useState<User | null>();
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      setUser(user);
-    });
-  });
-
+  const user = JSON.parse(localStorage.getItem("user") as string);
   return { user };
 };

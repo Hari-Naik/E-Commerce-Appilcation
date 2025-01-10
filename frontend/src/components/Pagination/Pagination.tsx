@@ -30,7 +30,7 @@ const Pagination: React.FC<PropTypes> = ({ currentPage, totalPages }) => {
 
   return (
     <div className="flex items-center p-3">
-      <span className="capitalize text-sm text-[#212121]">
+      <span className="hidden sm:block capitalize text-sm text-[#212121]">
         page {currentPage} of {totalPages}
       </span>
       <nav className="flex-1 flex items-center justify-center gap-2">

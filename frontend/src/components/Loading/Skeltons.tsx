@@ -45,11 +45,13 @@ export const ProductsSkelton = () => {
 
 export const SearchSkelton = () => {
   return (
-    <div className="w-full md:flex-1 h-full flex flex-col gap-3 shadow-md p-3 bg-white">
-      <TextSkelton styles="w-[25%] sm:w-[15%] h-4" />
-      <TextSkelton styles="w-[50%] sm:w-[25%] h-5" />
-      <TextSkelton styles="w-[75%] sm:w-[35%] h-4" />
-      <ProductCardSkelton />
+    <div className="w-full h-full p-3">
+      <div className="w-full h-full flex flex-col gap-3 shadow-md bg-white p-3">
+        <TextSkelton styles="w-[25%] sm:w-[15%] h-4" />
+        <TextSkelton styles="w-[50%] sm:w-[25%] h-5" />
+        <TextSkelton styles="w-[75%] sm:w-[35%] h-4" />
+        <ProductCardSkelton />
+      </div>
     </div>
   );
 };

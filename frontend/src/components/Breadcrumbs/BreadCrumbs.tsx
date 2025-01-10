@@ -1,12 +1,17 @@
 import { FaChevronRight } from "react-icons/fa6";
 import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Breadcrumbs = () => {
+  const [searchParams] = useSearchParams();
   const { pathname } = useLocation();
-  const pathnames = pathname.split("/").slice(1);
+  let pathnames = pathname.split("/").slice(1);
+  const orderId = searchParams.get("order_id") as string;
 
   let breadcrumPath = "";
+  if (pathnames[0] === "order_details") {
+    pathnames = ["account", "orders", orderId];
+  }
 
   return (
     <div className="flex items-center gap-1 text-xs text-[#878787] mb-2">

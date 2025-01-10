@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CiSearch } from "react-icons/ci";
 import SearchQueryResults from "../SearchQueryResults/SearchQueryResults";
+import _debounce from "lodash/debounce";
 
 type SearchBarProps = {
   hidden?: string;
@@ -10,13 +11,20 @@ type SearchBarProps = {
 
 const SearchBar: React.FC<SearchBarProps> = ({ hidden }) => {
   const [query, setQuery] = useState<string>("");
+  const [debounceQuery, setDebounceQuery] = useState<string>("");
   const [showQueryResults, setShowQueryResults] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const debouncedFunc = _debounce(() => {
+      setDebounceQuery(query);
+      setShowQueryResults(true);
+    }, 500);
+    debouncedFunc();
+  }, [query]);
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    setShowQueryResults(true);
+    setQuery(e.target.value);
   };
 
   const handleSearchQueryResults = () => {
@@ -49,7 +57,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ hidden }) => {
       </form>
 
       {/* search query results */}
-      {query && showQueryResults && (
+      {debounceQuery && showQueryResults && (
         <SearchQueryResults
           query={query}
           handleSearchQueryResults={handleSearchQueryResults}

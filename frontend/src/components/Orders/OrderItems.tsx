@@ -8,7 +8,7 @@ type OrderItemProps = {
 
 const OrderItems: React.FC<OrderItemProps> = ({ orders }) => {
   return (
-    <ul className="w-full flex flex-col gap-3 mt-3">
+    <ul className="w-full flex flex-col gap-3 sm:mt-3">
       {orders?.map(order => {
         return order.items.map(item => (
           <OrderItem key={item._id} item={item} orderId={order.orderId} />

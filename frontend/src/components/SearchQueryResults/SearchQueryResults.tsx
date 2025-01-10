@@ -3,6 +3,7 @@ import { useSearch } from "../../hooks/useSearch";
 import { ProductType } from "../../types/definations";
 
 import QueryResultItem from "./QueryResultItem";
+import NotFound from "./NotFound";
 
 type SearchQueryResultsProps = {
   query: string;
@@ -14,8 +15,11 @@ const SearchQueryResults: React.FC<SearchQueryResultsProps> = ({
   handleSearchQueryResults,
 }) => {
   const { data } = useSearch(query, 0, "price", "asc");
+  console.log("query data", data);
+
   return (
     <ul className="w-full h-[264px] absolute top-[37px] z-10 bg-white shadow rounded-b overflow-hidden overflow-y-auto">
+      {data?.products.length === 0 && <NotFound />}
       {data?.products.map((product: ProductType) => (
         <QueryResultItem
           key={product.id}

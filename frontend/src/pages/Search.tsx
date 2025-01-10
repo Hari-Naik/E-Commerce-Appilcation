@@ -9,7 +9,7 @@ import { useQueryParams } from "../hooks/useQueryParams";
 import Error from "../components/Error";
 
 const Search = () => {
-  const { searchParams, updateQuery } = useQueryParams();
+  const { searchParams } = useQueryParams();
 
   const skip = +(searchParams.get("skip") as string);
   const sortBy = searchParams.get("sortBy") || "price";
@@ -26,16 +26,31 @@ const Search = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [skip, sortBy, order]);
 
-  const handleSortByPrice = (sortBy: string, order: string) => {
-    updateQuery(sortBy, "price");
-    updateQuery("order", order);
-  };
-
   if (isLoading) {
     return <SearchSkelton />;
   }
+
   if (error) {
     return <Error errorMessage={error.message} refetch={refetch} />;
+  }
+
+  if (data?.products.length === 0) {
+    return (
+      <div className="sm:p-3">
+        <div className="w-full h-[calc(100vh-120px)] bg-white shadow-md flex flex-col items-center justify-center gap-3">
+          <img
+            src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/error-no-search-results_2353c5.png"
+            alt="error-no-search-results"
+          />
+          <span className="text-base md:text-xl text-[#212121] font-medium">
+            Sorry, no results found!
+          </span>
+          <span className="text-sm md:text-base text-[#878787]">
+            Please check the spelling or try searching for something else
+          </span>
+        </div>
+      </div>
+    );
   }
 
   const totalPages = Math.ceil(data.total / 32);
@@ -48,7 +63,7 @@ const Search = () => {
         <h2 className="text-base text-[#212121] font-medium">
           Showing results for "{query}"
         </h2>
-        <SortBy order={order} onSortByChange={handleSortByPrice} />
+        <SortBy activeOrder={order} />
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (

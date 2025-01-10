@@ -33,11 +33,6 @@ const Products = () => {
     category
   );
 
-  const handleSortBy = (sortBy: string, order: string) => {
-    updateQuery("sortBy", sortBy);
-    updateQuery("order", order);
-  };
-
   const handleFilterByCategories = (category: string) => {
     updateQuery("category", category);
     updateQuery("skip", "0");
@@ -72,10 +67,7 @@ const Products = () => {
           limit={data.limit}
           totalProducts={data.total}
         />
-        <SortBy
-          order={sortBy === "price" ? order : "asc"}
-          onSortByChange={handleSortBy}
-        />
+        <SortBy activeOrder={sortBy === "price" ? order : "asc"} />
         <ProductsList products={data.products} />
         <hr />
         {totalPages > 1 && (

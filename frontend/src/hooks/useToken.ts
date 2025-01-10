@@ -7,8 +7,10 @@ export const useToken = () => {
   );
 
   useEffect(() => {
-    const accesss_token = Cookies.get("token");
-    setToken(accesss_token);
+    if (!token) {
+      const accesss_token = Cookies.get("token");
+      setToken(accesss_token);
+    }
   });
 
   return { token };

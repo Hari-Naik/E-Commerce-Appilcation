@@ -39,6 +39,10 @@ const Login: FC<LoginProps> = ({ handleAuthChange }) => {
       );
       const token = await response.user.getIdToken();
       Cookies.set("token", token, { expires: 30 });
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ uid: response.user.uid, email: response.user.email })
+      );
       toast.success("Login successful");
       navigate(-1);
     } catch (error: unknown) {
